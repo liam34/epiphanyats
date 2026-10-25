@@ -16,10 +16,15 @@ const initialState: ContactState = { status: 'idle' }
 export function ContactForm() {
   const [state, formAction, pending] = useActionState(submitContact, initialState)
 
-  if (state.status === 'success') {
+  if (state.status === 'success' || state.status === 'saved') {
     return (
-      <p role="status" className="py-10 text-lg text-foreground">
-        Thanks for your message. We will be in touch soon.
+      <p
+        role={state.status === 'success' ? 'status' : 'alert'}
+        className="py-10 text-lg text-foreground"
+      >
+        {state.status === 'success'
+          ? 'Thanks for your message. We will be in touch soon.'
+          : state.formError}
       </p>
     )
   }

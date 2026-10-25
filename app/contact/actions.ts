@@ -6,13 +6,14 @@ const fields = ['firstName', 'lastName', 'email', 'phone', 'subject', 'message']
 type ContactField = (typeof fields)[number]
 
 export type ContactState = {
-  status: 'idle' | 'success' | 'error'
+  status: 'idle' | 'success' | 'saved' | 'error'
   errors?: Partial<Record<ContactField, string>>
   formError?: string
 }
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 const PHONE_RE = /^[+\d\s().-]{7,20}$/
+const NOTIFICATION_EMAIL = 'lamarque@epiphanyats.com'
 
 export async function submitContact(_previousState: ContactState, formData: FormData): Promise<ContactState> {
   const get = (field: ContactField) => {
@@ -45,8 +46,8 @@ export async function submitContact(_previousState: ContactState, formData: Form
     return { status: 'error', formError: 'We could not save your message. Please try again later.' }
   }
 
+  const db = createClient({ url, authToken })
   try {
-    const db = createClient({ url, authToken })
     await db.execute(`
       CREATE TABLE IF NOT EXISTS contact_messages (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -73,9 +74,59 @@ export async function submitContact(_previousState: ContactState, formData: Form
         values.message,
       ],
     })
-    return { status: 'success' }
   } catch (error) {
     console.error('Failed to save contact form submission to Turso.', error)
     return { status: 'error', formError: 'We could not save your message. Please try again later.' }
+  } finally {
+    await db.close()
+  }
+
+  const resendApiKey = process.env.RESEND_API_KEY
+  const fromEmail = process.env.RESEND_FROM_EMAIL
+  if (!resendApiKey || !fromEmail) {
+    console.error('Contact notification email is not configured. Set RESEND_API_KEY and RESEND_FROM_EMAIL.')
+    return {
+      status: 'saved',
+      formError: 'Your message was saved, but email notifications are not configured yet.',
+    }
+  }
+
+  try {
+    const response = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${resendApiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        from: fromEmail,
+        to: [NOTIFICATION_EMAIL],
+        reply_to: values.email,
+        subject: `Contact form: ${values.subject.replace(/[\r\n]+/g, ' ')}`,
+        text: [
+          `Name: ${values.firstName} ${values.lastName}`,
+          `Email: ${values.email}`,
+          `Phone: ${values.phone}`,
+          '',
+          values.message,
+        ].join('\n'),
+      }),
+    })
+
+    if (!response.ok) {
+      console.error(`Resend rejected the contact notification with HTTP ${response.status}.`)
+      return {
+        status: 'saved',
+        formError: 'Your message was saved, but we could not send the email notification. We will follow up soon.',
+      }
+    }
+
+    return { status: 'success' }
+  } catch (error) {
+    console.error('Failed to send the contact notification with Resend.', error)
+    return {
+      status: 'saved',
+      formError: 'Your message was saved, but we could not send the email notification. We will follow up soon.',
+    }
   }
 }
