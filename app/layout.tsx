@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     'Epiphany Accounting & Tax Services — bookkeeping, personal and corporate tax, payroll and financial advisory for individuals and small businesses in Edmonton since 2005.',
   generator: 'v0.app',
   icons: {
-    icon: '/icon.svg',
+    icon: [{ url: '/icon.svg?v=2', type: 'image/svg+xml' }],
     apple: '/apple-icon.png',
   },
 }
