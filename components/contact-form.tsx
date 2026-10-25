@@ -1,6 +1,7 @@
 'use client'
 
-import { useState, type FormEvent } from 'react'
+import { useActionState } from 'react'
+import { submitContact, type ContactState } from '@/app/contact/actions'
 
 const fields = [
   { name: 'firstName', label: 'First Name', type: 'text', autoComplete: 'given-name' },
@@ -10,64 +11,23 @@ const fields = [
   { name: 'subject', label: 'Subject', type: 'text' },
 ] as const
 
-type SubmissionState = 'idle' | 'success' | 'error'
+const initialState: ContactState = { status: 'idle' }
 
 export function ContactForm() {
-  const [state, setState] = useState<SubmissionState>('idle')
-  const [pending, setPending] = useState(false)
+  const [state, formAction, pending] = useActionState(submitContact, initialState)
 
-  async function onSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault()
-    setPending(true)
-    setState('idle')
-
-    const formData = new FormData(event.currentTarget)
-    formData.set(
-      'name',
-      `${formData.get('firstName')} ${formData.get('lastName')}`,
-    )
-
-    try {
-      const response = await fetch('https://api.web3forms.com/submit', {
-        method: 'POST',
-        body: formData,
-      })
-      const result: unknown = await response.json()
-
-      if (
-        response.ok &&
-        typeof result === 'object' &&
-        result !== null &&
-        'success' in result &&
-        result.success === true
-      ) {
-        setState('success')
-      } else {
-        setState('error')
-      }
-    } catch {
-      setState('error')
-    } finally {
-      setPending(false)
-    }
-  }
-
-  if (state === 'success') {
+  if (state.status === 'success') {
     return (
       <p role="status" className="py-10 text-lg text-foreground">
-        Thanks for submitting!
+        Thanks for your message. We will be in touch soon.
       </p>
     )
   }
 
   return (
-    <form onSubmit={onSubmit} className="flex flex-col gap-3">
-      <input
-        type="hidden"
-        name="access_key"
-        value="adb2dad8-4ced-4edc-9990-736fead04949"
-      />
+    <form action={formAction} className="flex flex-col gap-3">
       {fields.map((f) => {
+        const error = state.errors?.[f.name]
         return (
           <div key={f.name} className="flex flex-col gap-1">
             <label htmlFor={f.name} className="text-sm text-foreground">
@@ -80,8 +40,15 @@ export function ContactForm() {
               required
               autoComplete={'autoComplete' in f ? f.autoComplete : undefined}
               placeholder={'placeholder' in f ? f.placeholder : undefined}
+              aria-invalid={error ? true : undefined}
+              aria-describedby={error ? `${f.name}-error` : undefined}
               className="h-9 border border-input bg-background px-3 text-sm text-foreground outline-none focus:border-accent aria-invalid:border-primary"
             />
+            {error && (
+              <p id={`${f.name}-error`} className="text-sm text-primary">
+                {error}
+              </p>
+            )}
           </div>
         )
       })}
@@ -94,8 +61,15 @@ export function ContactForm() {
           name="message"
           required
           rows={5}
+          aria-invalid={state.errors?.message ? true : undefined}
+          aria-describedby={state.errors?.message ? 'message-error' : undefined}
           className="border border-input bg-background px-3 py-2 text-sm text-foreground outline-none focus:border-accent aria-invalid:border-primary"
         />
+        {state.errors?.message && (
+          <p id="message-error" className="text-sm text-primary">
+            {state.errors.message}
+          </p>
+        )}
       </div>
       <button
         type="submit"
@@ -104,9 +78,9 @@ export function ContactForm() {
       >
         {pending ? 'Sending...' : 'Send'}
       </button>
-      {state === 'error' && (
+      {state.formError && (
         <p role="alert" className="text-sm text-primary">
-          We could not send your message. Please try again.
+          {state.formError}
         </p>
       )}
     </form>
