@@ -30,7 +30,7 @@ export default function AboutPage() {
         <div className="mx-auto flex max-w-6xl flex-col gap-6 md:flex-row md:items-start">
           <div className="relative aspect-[244/241] w-full shrink-0 md:w-64">
             <Image
-              src="/images/associate.png"
+              src="/images/Picture.pic.png"
               alt="Lamarque Volcy, Associate, standing in a conference room"
               fill
               sizes="(min-width: 768px) 256px, 100vw"
