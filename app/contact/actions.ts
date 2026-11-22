@@ -13,7 +13,6 @@ export type ContactState = {
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 const PHONE_RE = /^[+\d\s().-]{7,20}$/
-const NOTIFICATION_EMAIL = 'lamarque@epiphanyats.com'
 
 export async function submitContact(_previousState: ContactState, formData: FormData): Promise<ContactState> {
   const get = (field: ContactField) => {
@@ -83,8 +82,9 @@ export async function submitContact(_previousState: ContactState, formData: Form
 
   const resendApiKey = process.env.RESEND_API_KEY
   const fromEmail = process.env.RESEND_FROM_EMAIL
-  if (!resendApiKey || !fromEmail) {
-    console.error('Contact notification email is not configured. Set RESEND_API_KEY and RESEND_FROM_EMAIL.')
+  const notificationEmail = process.env.CONTACT_NOTIFICATION_EMAIL
+  if (!resendApiKey || !fromEmail || !notificationEmail) {
+    console.error('Contact notification email is not configured. Set RESEND_API_KEY, RESEND_FROM_EMAIL, and CONTACT_NOTIFICATION_EMAIL.')
     return {
       status: 'saved',
       formError: 'Your message was saved, but email notifications are not configured yet.',
@@ -100,7 +100,7 @@ export async function submitContact(_previousState: ContactState, formData: Form
       },
       body: JSON.stringify({
         from: fromEmail,
-        to: [NOTIFICATION_EMAIL],
+        to: [notificationEmail],
         reply_to: values.email,
         subject: `Contact form: ${values.subject.replace(/[\r\n]+/g, ' ')}`,
         text: [
