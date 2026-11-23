@@ -12,8 +12,8 @@ export const contactInfo = {
   phoneHref: 'tel:+15873347315',
   addressLines: ['Epiphany Accounting & Tax Services', '#1402, 10030 – 114 Street NW', 'Edmonton, AB T5K 1R3'],
   hours: [
-    { label: 'Monday – Friday', value: '5PM – 8PM' },
-    { label: 'Weekends & Holidays', value: '10AM – 8PM' },
+    { label: 'Monday – Friday', value: '8:00 AM – 6:00 PM' },
+    { label: 'Weekends & Holidays', value: '10:00 AM – 6:00 PM' },
   ],
 }
 
