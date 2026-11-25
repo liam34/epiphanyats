@@ -12,6 +12,17 @@ const nextConfig = {
   async headers() {
     return [
       {
+        source: '/',
+        headers: [
+          {
+            key: 'Link',
+            value:
+              '</llms.txt>; rel="alternate"; type="text/plain"; title="LLMs.txt", </>; rel="alternate"; type="text/markdown"; title="Markdown", </.well-known/mcp/server-card.json>; rel="mcp-server-card"; type="application/json"',
+          },
+          { key: 'Vary', value: 'Accept' },
+        ],
+      },
+      {
         source: '/:path*',
         headers: [
           { key: 'X-Content-Type-Options', value: 'nosniff' },

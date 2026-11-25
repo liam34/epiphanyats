@@ -7,6 +7,7 @@ export const metadata: Metadata = {
   title: 'Clients',
   description:
     'Accounting, payroll and tax services for retail, construction, farming, not-for-profit, trucking, cleaning and more.',
+  alternates: { canonical: '/clients' },
 }
 
 export default function ClientsPage() {

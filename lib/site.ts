@@ -1,3 +1,11 @@
+export const siteUrl = 'https://epiphanyats.com'
+
+export const socialLinks = [
+  { label: 'Facebook', href: 'https://www.facebook.com' },
+  { label: 'Twitter', href: 'https://twitter.com' },
+  { label: 'LinkedIn', href: 'https://www.linkedin.com' },
+] as const
+
 export const navLinks = [
   { href: '/', label: 'Home' },
   { href: '/about', label: 'About us' },
@@ -7,7 +15,7 @@ export const navLinks = [
 ] as const
 
 export const contactInfo = {
-  email: 'info@epiphanyats.ca',
+  email: 'lamarque@epiphanyats.com',
   phone: '(587) 334-7315',
   phoneHref: 'tel:+15873347315',
   addressLines: ['Epiphany Accounting & Tax Services', '#1402, 10030 – 114 Street NW', 'Edmonton, AB T5K 1R3'],
@@ -121,7 +129,7 @@ export const serviceDetails: ServiceDetail[] = [
     title: 'Payroll',
     paragraphs: [
       'Epiphany Accounting & Tax Services is happy to assist you with payroll setup for small businesses across any industry. We are using a major payroll software that is implemented for your business.',
-      'Payroll tax preparation: if you already ran payroll and need assistance with your filings, please contact us directly at (587) 334-7315.',
+      `Payroll tax preparation: if you already ran payroll and need assistance with your filings, please contact us directly at ${contactInfo.phone}.`,
     ],
     listIntro: 'We can help with any of the following:',
     list: [

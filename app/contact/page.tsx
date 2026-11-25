@@ -5,7 +5,8 @@ import { contactInfo } from '@/lib/site'
 
 export const metadata: Metadata = {
   title: 'Contact',
-  description: 'Contact Epiphany Accounting & Tax Services in Edmonton, AB. Call (587) 334-7315 or email info@epiphanyats.ca.',
+  description: `Contact Epiphany Accounting & Tax Services in Edmonton, AB. Call ${contactInfo.phone} or email ${contactInfo.email}.`,
+  alternates: { canonical: '/contact' },
 }
 
 function InfoBlock({ title, children }: { title: string; children: React.ReactNode }) {

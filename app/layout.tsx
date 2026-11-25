@@ -3,17 +3,24 @@ import type { Metadata, Viewport } from 'next'
 import { Nunito_Sans } from 'next/font/google'
 import { SiteHeader } from '@/components/site-header'
 import { SiteFooter } from '@/components/site-footer'
+import ChatWidget from '@/components/ChatWidget'
+import WebMcpProvider from '@/components/WebMcpProvider'
+import { contactInfo, siteUrl } from '@/lib/site'
 import './globals.css'
 
 const _nunitoSans = Nunito_Sans({ subsets: ['latin'], weight: ['300', '400', '600', '700', '800'] })
 
 export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl),
   title: {
     default: 'Home | Epiphany Services',
     template: '%s | Epiphany Services',
   },
   description:
     'Epiphany Accounting & Tax Services — bookkeeping, personal and corporate tax, payroll and financial advisory for individuals and small businesses in Edmonton since 2005.',
+  alternates: {
+    canonical: './',
+  },
   generator: 'v0.app',
   icons: {
     icon: [{ url: '/icon.svg?v=2', type: 'image/svg+xml' }],
@@ -45,6 +52,14 @@ export default function RootLayout({
           {children}
         </main>
         <SiteFooter />
+        <WebMcpProvider />
+        <ChatWidget
+          contactDetails={{
+            email: contactInfo.email,
+            phone: contactInfo.phone,
+            phoneHref: contactInfo.phoneHref,
+          }}
+        />
         {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>
     </html>

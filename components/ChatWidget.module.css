@@ -1,0 +1,338 @@
+.root {
+  --chat-accent: var(--primary);
+  --chat-accent-text: var(--primary-foreground);
+  --chat-bg: var(--card);
+  --chat-text: var(--card-foreground);
+  --chat-muted: var(--secondary);
+  --chat-border: var(--border);
+  --chat-focus: var(--ring);
+  --chat-launcher-bg: var(--accent);
+  --chat-launcher-text: var(--accent-foreground);
+  --chat-radius: 14px;
+
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 1000;
+  font-family: inherit;
+  color: var(--chat-text);
+}
+
+.launcher {
+  display: block;
+  margin-left: auto;
+  min-width: 58px;
+  height: 58px;
+  padding: 0 20px;
+  border: 2px solid var(--background);
+  border-radius: 29px;
+  background: var(--chat-launcher-bg);
+  color: var(--chat-launcher-text);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow:
+    0 0 0 2px var(--accent),
+    0 0 0 4px var(--background),
+    0 9px 28px rgba(0, 0, 0, 0.42);
+  transition: transform 200ms ease, filter 200ms ease, box-shadow 200ms ease;
+}
+
+.launcher:hover {
+  transform: scale(1.06);
+  filter: brightness(1.12);
+  box-shadow:
+    0 0 0 2px var(--accent),
+    0 0 0 4px var(--background),
+    0 12px 32px rgba(0, 0, 0, 0.48);
+}
+
+.welcome {
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 16px);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: min(300px, calc(100vw - 32px));
+  padding: 16px 40px 16px 16px;
+  border: 1px solid var(--accent);
+  border-radius: var(--chat-radius);
+  background: var(--chat-bg);
+  color: var(--chat-text);
+  box-shadow:
+    0 0 0 2px var(--background),
+    0 12px 32px rgba(0, 0, 0, 0.36);
+}
+
+.welcomeTitle {
+  color: var(--chat-accent);
+  font-size: 15px;
+  line-height: 1.35;
+}
+
+.welcomeMessage {
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.welcomeClose {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: grid;
+  width: 28px;
+  height: 28px;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  background: var(--chat-muted);
+  color: var(--chat-text);
+  font: inherit;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  width: min(380px, calc(100vw - 40px));
+  height: min(560px, calc(100vh - 110px));
+  margin-bottom: 12px;
+  background: var(--chat-bg);
+  border: 1px solid var(--accent-soft);
+  border-radius: var(--chat-radius);
+  box-shadow: 0 18px 48px rgba(47, 46, 46, 0.3);
+  overflow: hidden;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  background: var(--chat-accent);
+  color: var(--chat-accent-text);
+}
+
+.title {
+  font-weight: 600;
+}
+
+.close {
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font-size: 24px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.messages {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px;
+  overflow-y: auto;
+}
+
+.bubble {
+  max-width: 85%;
+  padding: 10px 13px;
+  border-radius: 12px;
+  line-height: 1.45;
+  font-size: 15px;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.assistant {
+  align-self: flex-start;
+  background: var(--chat-muted);
+}
+
+.paragraph {
+  margin: 0;
+}
+
+.paragraph + .paragraph,
+.paragraph + .bulletList,
+.bulletList + .paragraph {
+  margin-top: 8px;
+}
+
+.bulletList {
+  margin: 4px 0 0;
+  padding-left: 18px;
+  list-style-type: disc;
+}
+
+.bulletList li + li {
+  margin-top: 4px;
+}
+
+.contactLinks {
+  display: block;
+  margin-top: 8px;
+}
+
+.contactLinks a,
+.inlineLink {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.user {
+  align-self: flex-end;
+  background: var(--chat-accent);
+  color: var(--chat-accent-text);
+}
+
+.starters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.starter {
+  padding: 8px 12px;
+  border: 1px solid var(--chat-border);
+  border-radius: 999px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.starter:hover {
+  background: var(--chat-muted);
+}
+
+.starter:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.error {
+  align-self: stretch;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: var(--chat-muted);
+  color: var(--destructive);
+  font-size: 14px;
+}
+
+.composer {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  border-top: 1px solid var(--chat-border);
+}
+
+.composerControls {
+  display: flex;
+  gap: 8px;
+}
+
+.input {
+  flex: 1;
+  resize: none;
+  max-height: 120px;
+  padding: 10px 12px;
+  border: 1px solid var(--chat-border);
+  border-radius: 10px;
+  background: var(--chat-bg);
+  color: inherit;
+  font: inherit;
+  font-size: 15px;
+}
+
+.send {
+  padding: 0 16px;
+  border: 0;
+  border-radius: 10px;
+  background: var(--chat-accent);
+  color: var(--chat-accent-text);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.send:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.typing {
+  display: inline-flex;
+  gap: 4px;
+  align-items: center;
+  height: 1em;
+}
+
+.typing i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.4;
+  animation: pulse 1s infinite ease-in-out;
+}
+
+.typing i:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+.typing i:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+@keyframes pulse {
+  50% {
+    opacity: 1;
+  }
+}
+
+.launcher:focus-visible,
+.welcomeClose:focus-visible,
+.close:focus-visible,
+.starter:focus-visible,
+.send:focus-visible,
+.input:focus-visible {
+  outline: 2px solid var(--chat-focus);
+  outline-offset: 2px;
+}
+
+.header .close:focus-visible {
+  outline-color: var(--chat-accent-text);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .typing i {
+    animation: none;
+    opacity: 0.7;
+  }
+
+  .launcher {
+    transition: none;
+  }
+
+  .launcher:hover {
+    transform: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .root {
+    right: 12px;
+    bottom: 12px;
+  }
+  .panel {
+    width: calc(100vw - 24px);
+  }
+}

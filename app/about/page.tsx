@@ -7,6 +7,7 @@ import { contactInfo } from '@/lib/site'
 export const metadata: Metadata = {
   title: 'About us',
   description: 'Epiphany Accounting & Tax Services has served individuals and businesses in Edmonton since 2005.',
+  alternates: { canonical: '/about' },
 }
 
 export default function AboutPage() {

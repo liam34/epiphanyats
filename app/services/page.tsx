@@ -8,6 +8,7 @@ export const metadata: Metadata = {
   title: 'Services',
   description:
     'Bookkeeping, personal and corporate tax, tax strategies, consulting, payroll and financial advisory services in Edmonton.',
+  alternates: { canonical: '/services' },
 }
 
 export default function ServicesPage() {
