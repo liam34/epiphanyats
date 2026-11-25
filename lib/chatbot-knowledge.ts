@@ -1,7 +1,4 @@
-// Edit this file: it is the only place the chatbot learns about the firm.
-// Replace every [BRACKETED] item with real details. Anything left blank or
-// vague, the bot will not guess; it will send visitors to your contact info.
-import { contactInfo } from "@/lib/site";
+import { contactInfo, industries, serviceDetails } from "@/lib/site";
 
 export const BUSINESS = {
   name: "Epiphany Accounting & Tax Services",
@@ -14,48 +11,34 @@ export const BUSINESS = {
   bookingLink: "the contact page at /contact",
 };
 
+const formattedServices = serviceDetails
+  .map((service) => {
+    const details = [...service.paragraphs];
+    if (service.listIntro && service.list?.length) {
+      details.push(`${service.listIntro} ${service.list.join("; ")}.`);
+    }
+    return `### ${service.title}\n${details.join("\n")}`;
+  })
+  .join("\n\n");
+
 export const KNOWLEDGE = `
 ## About the firm
-[2-3 sentences: who you are, how long you've been in practice, who you serve
-(individuals, self-employed, small businesses, corporations), credentials such
-as CPA/CA/EA, and your location or service area.]
+Epiphany Accounting & Tax Services (EATS) is an accounting, tax, and consulting firm in Edmonton, AB, serving individuals, self-employed professionals, small businesses, charities, partnerships, and corporations since 2005. Associate: Lamarque Volcy (${BUSINESS.contactEmail}, ${BUSINESS.contactPhone}).
 
-## Accounting services
-- Bookkeeping: [what's included, monthly or quarterly, software you use]
-- Payroll: [what's included]
-- Financial statements and year-end: [what's included]
-- [Other accounting services]
+## Services
+${formattedServices}
 
-## Tax services
-- Personal tax returns: [who it's for, what's covered]
-- Self-employed / sole proprietor returns: [...]
-- Business / corporate tax returns: [...]
-- Sales tax / GST/HST/VAT filings: [...]
-- Tax planning and tax-saving strategies: [...]
-- CRA/IRS/tax authority notices, audits, and reviews: [how you help]
-- [Prior-year or late filings, if you handle them]
+## Industries served
+We serve clients across many industries, including: ${industries.join(", ")}.
 
-## Financial and tax consulting
-- Business start-up and entity structure: [...]
-- Cash flow, budgeting, and financial planning: [...]
-- [Other consulting services]
-
-## Pricing
-[How you charge: flat fee per return, hourly rate, monthly packages, or free
-quote after a consultation. Include starting prices only if you want the bot
-to share them.]
-
-## Getting started
-[Steps for a new client, e.g. 1) book a free consultation, 2) we review your
-situation, 3) you receive a quote and engagement letter, 4) you upload your
-documents through the secure portal.]
+## Getting started & booking a consultation
+To book a consultation or request a quote, visit [Contact page](/contact), call ${BUSINESS.contactPhone}, or email ${BUSINESS.contactEmail}. Our team will review your needs and let you know which documents to prepare.
 
 ## Documents clients typically provide
-[e.g. last year's return, income slips, expense receipts, bank statements.
-Mention your secure upload portal by name.]
+Depending on your situation, our team may ask for relevant tax documents (such as CRA slips, prior-year returns, income/expense records, payroll filings, or financial statements) after you connect with us directly. Do not share sensitive documents, SIN/SSN, or financial account numbers in this chat.
 
-## Secure portal
-[Name of your client portal and how clients get access.]
+## Pricing & turnaround time
+Pricing and turnaround times depend on your business or personal tax needs. Contact our team via [Contact page](/contact), ${BUSINESS.contactPhone}, or ${BUSINESS.contactEmail} for a tailored quote.
 
 ## Contact
 Email: ${BUSINESS.contactEmail}
@@ -63,21 +46,7 @@ Phone: ${BUSINESS.contactPhone}
 Address: ${BUSINESS.address}
 
 ## Hours and location
-${BUSINESS.hours}.
-
-## Deadlines you want the bot to mention
-[Only list dates you have confirmed for the current tax year, with the year
-stated. If you leave this empty, the bot will not quote deadlines.]
-
-## FAQ
-Q: How long does it take to prepare a return?
-A: [Your real turnaround time.]
-
-Q: Do you work with clients outside [your area]?
-A: [Your real answer.]
-
-Q: Can you help if I'm behind on filing or received a notice?
-A: [Your real answer.]
+${BUSINESS.hours}. Located in Edmonton, AB (${BUSINESS.address}).
 `;
 
 export const SYSTEM_PROMPT = `You are the website assistant for ${BUSINESS.name}, an accounting, tax, and financial consulting firm. You answer visitors' questions about the firm and its services.
