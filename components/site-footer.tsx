@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import Link from 'next/link'
 import { contactInfo, socialLinks } from '@/lib/site'
 
@@ -64,6 +65,17 @@ export function SiteFooter() {
             </li>
           ))}
         </ul>
+
+        <div className="flex items-center">
+          <Image
+            src="/images/squarevendo_official2026.png"
+            alt="Squarevendo Web Studio — Website Creator & Webmaster"
+            title="Website created and maintained by Squarevendo Web Studio"
+            width={64}
+            height={64}
+            className="size-16 rounded-sm object-contain shadow-sm"
+          />
+        </div>
       </div>
     </footer>
   )
