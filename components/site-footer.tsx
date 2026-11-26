@@ -67,14 +67,23 @@ export function SiteFooter() {
         </ul>
 
         <div className="flex items-center">
-          <Image
-            src="/images/squarevendo_official2026.png"
-            alt="Squarevendo Web Studio — Website Creator & Webmaster"
+          <a
+            href="https://squarevendo.com/"
+            target="_blank"
+            rel="noopener noreferrer"
             title="Website created and maintained by Squarevendo Web Studio"
-            width={64}
-            height={64}
-            className="size-16 rounded-sm object-contain shadow-sm"
-          />
+            aria-label="Squarevendo Web Studio — Website Creator & Webmaster"
+            className="block transition-opacity hover:opacity-90"
+          >
+            <Image
+              src="/images/squarevendo_official2026.png"
+              alt="Squarevendo Web Studio — Website Creator & Webmaster"
+              title="Website created and maintained by Squarevendo Web Studio"
+              width={64}
+              height={64}
+              className="size-16 rounded-sm object-contain shadow-sm"
+            />
+          </a>
         </div>
       </div>
     </footer>
